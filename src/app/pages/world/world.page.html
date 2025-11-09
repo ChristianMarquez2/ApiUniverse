@@ -163,22 +163,7 @@
     </ng-container>
   </ng-container>
 
-  <ion-footer class="mini-player">
-    <ion-toolbar>
-      <div class="player-wrapper">
-        <img [src]="data?.artwork" alt="cover" *ngIf="id === 'music' && data?.artwork">
-        <div class="info">
-          <h4>{{ data?.trackName || 'Sin título' }}</h4>
-          <p>{{ data?.artistName || '' }}</p>
-        </div>
-        <div class="controls">
-          <ion-button fill="clear" size="small"><ion-icon name="play-skip-back"></ion-icon></ion-button>
-          <ion-button fill="clear" size="small"><ion-icon name="play"></ion-icon></ion-button>
-          <ion-button fill="clear" size="small"><ion-icon name="play-skip-forward"></ion-icon></ion-button>
-        </div>
-      </div>
-    </ion-toolbar>
-  </ion-footer>
+  
 
   <ng-template #skel>
     <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
