@@ -1,0 +1,317 @@
+/* ===== Universo de fondo ===== */
+.universe {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  --deep1: #050816;
+  --deep2: #0a1030;
+  --deep3: #02040a;
+  background: radial-gradient(120% 120% at 20% -10%, #0b1b3a, transparent 60%),
+    radial-gradient(120% 120% at 80% 110%, #120b2a, transparent 60%),
+    radial-gradient(80% 80% at 50% 50%, var(--deep2), var(--deep3)),
+    var(--deep1);
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.stars {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  top: 0;
+  left: 0;
+}
+
+.s1 {
+  box-shadow: 20vw 10vh #fff, 40vw 30vh #fff, 60vw 15vh #fff, 80vw 50vh #fff, 10vw 70vh #fff,
+    25vw 80vh #fff, 70vw 75vh #fff, 85vw 20vh #fff, 15vw 40vh #fff, 55vw 60vh #fff;
+  filter: blur(.6px);
+  animation: tw1 8s ease-in-out infinite;
+}
+
+.s2 {
+  box-shadow: 12vw 22vh #fff, 32vw 12vh #fff, 52vw 42vh #fff, 72vw 28vh #fff, 92vw 66vh #fff,
+    8vw 85vh #fff, 44vw 78vh #fff, 64vw 88vh #fff, 18vw 58vh #fff, 48vw 35vh #fff;
+  filter: blur(1px);
+  animation: tw2 9s ease-in-out infinite;
+}
+
+.s3 {
+  box-shadow: 6vw 16vh #fff, 26vw 46vh #fff, 46vw 26vh #fff, 66vw 66vh #fff, 86vw 36vh #fff,
+    14vw 32vh #fff, 34vw 72vh #fff, 54vw 52vh #fff, 74vw 12vh #fff, 94vw 82vh #fff;
+  filter: blur(1.4px);
+  animation: tw3 10s ease-in-out infinite;
+}
+
+@keyframes tw1 {
+
+  0%,
+  100% {
+    opacity: .9
+  }
+
+  50% {
+    opacity: .5
+  }
+}
+
+@keyframes tw2 {
+
+  0%,
+  100% {
+    opacity: .85
+  }
+
+  50% {
+    opacity: .55
+  }
+}
+
+@keyframes tw3 {
+
+  0%,
+  100% {
+    opacity: .8
+  }
+
+  50% {
+    opacity: .5
+  }
+}
+
+.comet {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #fff;
+  border-radius: 999px;
+  filter: drop-shadow(0 0 6px #fff);
+  opacity: .9;
+}
+
+.comet::after {
+  content: '';
+  position: absolute;
+  right: 2px;
+  top: 1px;
+  width: 160px;
+  height: 2px;
+  background: linear-gradient(90deg, #fff, transparent);
+  transform: skewY(-8deg);
+}
+
+.c1 {
+  top: -10%;
+  left: 8%;
+  animation: comet 14s linear infinite;
+}
+
+.c2 {
+  top: -20%;
+  left: 60%;
+  animation: comet 18s linear infinite 4s;
+}
+
+@keyframes comet {
+  0% {
+    transform: translate(0, 0) rotate(-25deg);
+    opacity: 0
+  }
+
+  5% {
+    opacity: .9
+  }
+
+  100% {
+    transform: translate(120vw, 120vh) rotate(-25deg);
+    opacity: 0
+  }
+}
+
+/* ===== Sistema Solar (más grande) ===== */
+.system {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.sun {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+}
+
+.sun .planet.star {
+  display: block;
+  border-radius: 999px;
+  box-shadow: 0 0 24px rgba(255, 180, 80, .7), inset 0 0 2px rgba(0, 0, 0, .25);
+  overflow: hidden;
+  /* asegura que el gradiente no se vea cuadrado */
+}
+
+.sun .glow {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 184, 77, .25), rgba(255, 138, 0, .06) 60%, transparent 70%);
+  filter: blur(8px);
+  z-index: -1;
+}
+
+/* Órbitas (con arranque variable) */
+.orbit {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border: 1px dashed rgba(255, 255, 255, .18);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(var(--start, 0deg));
+  animation: spin var(--dur, 36s) linear infinite;
+  pointer-events: none;
+  /* NO intercepta el click */
+  z-index: 1;
+  /* debajo de planetas */
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(calc(var(--start, 0deg) + 360deg));
+  }
+}
+
+.planet {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  border-radius: 999px;
+  z-index: 2;
+  /* por encima de órbitas */
+}
+
+.body {
+  border-radius: 999px;
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, .35), 0 0 12px rgba(255, 255, 255, .18);
+}
+
+.body.ring::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border: 2px solid rgba(255, 255, 255, .25);
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-radius: 50%;
+  transform: rotateX(65deg);
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, .15));
+}
+
+.label {
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  margin-top: 6px;
+  text-shadow: 0 0 6px rgba(0, 0, 0, .7);
+}
+
+/* === UI que se mantiene horizontal (label + tooltip) === */
+.ui {
+  position: relative;
+  animation: anti-spin var(--dur, 36s) linear infinite;
+  /* contrarresta el giro */
+  transform-origin: center;
+}
+
+@keyframes anti-spin {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.tooltip {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  width: min(70vw, 260px);
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .15);
+  color: #e7edf8;
+  border-radius: 12px;
+  padding: 10px 12px;
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: .22s ease;
+  text-align: center;
+  z-index: 3;
+  /* por encima de todo */
+  pointer-events: auto;
+  /* botones clicables */
+}
+
+.tooltip.right {
+  left: calc(100% + 14px);
+  top: 50%;
+  transform: translateX(0) translateY(-50%);
+  text-align: left;
+}
+
+.tooltip.center {
+  width: 300px;
+}
+
+.planet:hover .tooltip,
+.planet:focus .tooltip {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.planet:hover .tooltip.right,
+.planet:focus .tooltip.right {
+  transform: translateX(0) translateY(-50%);
+}
+
+.tooltip h4 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: #fff
+}
+
+.tooltip p {
+  margin: 0 0 4px;
+  font-size: 12px;
+  opacity: .9
+}
+
+.tooltip code {
+  display: block;
+  font-size: 11px;
+  word-break: break-all;
+  opacity: .95
+}
+
+.tooltip .actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  justify-content: center
+}

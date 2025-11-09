@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>APIverse 🌌</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="universe">
+  <!-- Fondo -->
+  <div class="bg">
+    <div class="stars s1"></div>
+    <div class="stars s2"></div>
+    <div class="stars s3"></div>
+    <div class="comet c1"></div>
+    <div class="comet c2"></div>
+  </div>
+
+  <!-- Sistema solar -->
+  <div #system class="system">
+    <!-- Sol -->
+    <div class="sun">
+      <a class="planet star"
+         [style.width.px]="sizePx(planetsArr[0])"
+         [style.height.px]="sizePx(planetsArr[0])"
+         [style.background]="planetsArr[0].gradient"
+         [routerLink]="['/tabs/world', planetsArr[0].id]">
+        <div class="glow"></div>
+        <div class="ui">
+          <div class="tooltip center">
+            <h4>{{ apiInfo(planetsArr[0].id).title }}</h4>
+            <p>{{ apiInfo(planetsArr[0].id).note }}</p>
+            <code>{{ apiInfo(planetsArr[0].id).url }}</code>
+            <div class="actions">
+              <ion-button size="small" [routerLink]="['/tabs/world', planetsArr[0].id]">Abrir</ion-button>
+              <ion-button size="small" fill="clear" (click)="copy(apiInfo(planetsArr[0].id).url)">Copiar</ion-button>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Órbitas + planetas -->
+    <div *ngFor="let p of planetsArr.slice(1)" class="orbit"
+         [style.width.px]="orbitPx(p)*2"
+         [style.height.px]="orbitPx(p)*2"
+         [style.--start]="p.start + 'deg'"
+         [style.--dur]="p.speed + 's'">
+      <a class="planet"
+         [style.transform]="'translate(-50%,-50%) translateX('+orbitPx(p)+'px)'"
+         [routerLink]="['/tabs/world', p.id]">
+        <div class="body"
+             [style.width.px]="sizePx(p)"
+             [style.height.px]="sizePx(p)"
+             [style.background]="p.gradient"
+             [class.ring]="p.ring"></div>
+        <div class="ui">
+          <div class="label">{{ p.name }}</div>
+          <div class="tooltip" [class.right]="orbitPx(p)<180">
+            <h4>{{ apiInfo(p.id).title }}</h4>
+            <p>{{ apiInfo(p.id).note }}</p>
+            <code>{{ apiInfo(p.id).url }}</code>
+            <div class="actions">
+              <ion-button size="small" [routerLink]="['/tabs/world', p.id]">Abrir</ion-button>
+              <ion-button size="small" fill="clear" (click)="copy(apiInfo(p.id).url)">Copiar</ion-button>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</ion-content>

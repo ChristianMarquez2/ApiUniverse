@@ -1,0 +1,188 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title> Mundo: {{ id | uppercase }} </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="fav()"><ion-icon name="star"></ion-icon></ion-button>
+      <ion-button (click)="share()"><ion-icon name="share-social"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="fetch(); $event.target.complete()">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ng-container *ngIf="!loading; else skel">
+    <ng-container [ngSwitch]="id">
+
+      <!-- Chistes -->
+      <ng-container *ngSwitchCase="'joke'">
+        <ion-card>
+          <ion-card-header><ion-card-title>Chiste</ion-card-title></ion-card-header>
+          <ion-card-content>{{ data?.text }}</ion-card-content>
+        </ion-card>
+      </ng-container>
+
+      <!-- Gato -->
+      <ng-container *ngSwitchCase="'cat'">
+        <ion-card>
+          <img [src]="data?.url" alt="gato" loading="lazy" (error)="hideImg($event)" />
+        </ion-card>
+      </ng-container>
+
+      <!-- Perro -->
+      <ng-container *ngSwitchCase="'dog'">
+        <ion-card>
+          <img [src]="data?.url" alt="perro" loading="lazy" (error)="hideImg($event)" />
+        </ion-card>
+      </ng-container>
+
+      <!-- Cataas (meme de gato) -->
+      <ng-container *ngSwitchCase="'cataas'">
+        <ion-card>
+          <img [src]="data?.meme" alt="meme cat" loading="lazy" (error)="hideImg($event)" />
+        </ion-card>
+      </ng-container>
+
+      <!-- Cripto -->
+      <ng-container *ngSwitchCase="'crypto'">
+        <ion-card>
+          <ion-card-header><ion-card-title>BTC/USD</ion-card-title></ion-card-header>
+          <ion-card-content>
+            <h1>\${{ data?.btcUsd }}</h1>
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
+
+      <!-- Clima -->
+      <ng-container *ngSwitchCase="'weather'">
+        <ion-card>
+          <ion-card-header><ion-card-title>Clima (ahora)</ion-card-title></ion-card-header>
+          <ion-card-content>
+            <p>Temperatura: {{ data?.temperature_2m }} °C</p>
+            <p>Código clima: {{ data?.weather_code }}</p>
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
+
+      <!-- Noticias (manejo de 401 sin romper) -->
+      <ng-container *ngSwitchCase="'news'">
+        <ion-item>
+          <ion-input [(ngModel)]="q" placeholder="Buscar noticias"></ion-input>
+          <ion-button (click)="fetch()">Buscar</ion-button>
+        </ion-item>
+        <ion-list *ngIf="data?.articles?.length; else noNews">
+          <ion-item *ngFor="let a of data.articles">
+            <ion-label>
+              <h2>{{ a.title }}</h2>
+              <p>{{ a.description }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+        <ng-template #noNews>
+          <ion-item lines="none">
+            <ion-label>
+              <p>No hay noticias (¿API key faltante o 401?).</p>
+            </ion-label>
+          </ion-item>
+        </ng-template>
+      </ng-container>
+
+      <!-- Pokémon -->
+      <ng-container *ngSwitchCase="'pokemon'">
+        <ion-card>
+          <ion-card-header><ion-card-title>Pokémon</ion-card-title></ion-card-header>
+          <ion-card-content>
+            <img *ngIf="data?.image" [src]="data.image" alt="pokemon" loading="lazy" (error)="hideImg($event)">
+            <h2 style="margin-top:8px">{{ data?.name | titlecase }}</h2>
+            <p *ngIf="data?.types?.length">Tipos: {{ data.types.join(', ') }}</p>
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
+
+      <!-- Rick & Morty -->
+      <ng-container *ngSwitchCase="'rick'">
+        <ion-card>
+          <ion-card-header><ion-card-title>Rick & Morty</ion-card-title></ion-card-header>
+          <ion-card-content>
+            <img *ngIf="data?.image" [src]="data.image" alt="character" loading="lazy" (error)="hideImg($event)">
+            <h2 style="margin-top:8px">{{ data?.name }}</h2>
+            <p *ngIf="data?.species">{{ data.species }} · {{ data.status }}</p>
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
+
+      <!-- Música (Neptune) -->
+      <ng-container *ngSwitchCase="'music'">
+        <ion-card>
+          <ion-card-header><ion-card-title>Música</ion-card-title></ion-card-header>
+          <ion-card-content>
+            <img *ngIf="data?.artwork" [src]="data.artwork" alt="artwork" loading="lazy"
+              style="border-radius:12px; width:100%; max-width:320px" (error)="hideImg($event)">
+            <h2 style="margin-top:8px">{{ data?.trackName }}</h2>
+            <p>{{ data?.artistName }}</p>
+            <p *ngIf="data?.term" style="opacity:.8">Búsqueda: “{{ data.term }}”</p>
+            <audio *ngIf="data?.previewUrl" controls style="width:100%; margin-top:8px">
+              <source [src]="data.previewUrl" type="audio/mpeg">
+            </audio>
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
+
+      <!-- SpaceX -->
+      <ng-container *ngSwitchCase="'spacex'">
+        <ion-card>
+          <ion-card-header><ion-card-title>SpaceX (próximo lanzamiento)</ion-card-title></ion-card-header>
+          <ion-card-content>
+            <img *ngIf="data?.patch" [src]="data.patch" alt="patch" loading="lazy" (error)="hideImg($event)">
+            <h2 style="margin-top:8px">{{ data?.name }}</h2>
+            <p *ngIf="data?.date_utc">Fecha: {{ data.date_utc | date:'medium' }}</p>
+            <ion-button *ngIf="data?.webcast" size="small" fill="clear" [href]="data.webcast" target="_blank">Ver
+              webcast</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
+
+      <!-- Mashup -->
+      <ng-container *ngSwitchDefault>
+        <ion-card>
+          <ion-card-header><ion-card-title>Mashup</ion-card-title></ion-card-header>
+          <ion-card-content>
+            <p>{{ data?.text }}</p>
+            <div class="imgs">
+              <img *ngFor="let i of data?.images" [src]="i" (error)="hideImg($event)" />
+            </div>
+            <p>BTC: \${{ data?.btc }}</p>
+            <p *ngIf="data?.weather">Temp: {{ data?.weather?.temperature_2m }} °C</p>
+            <img *ngIf="data?.memeUrl" [src]="data?.memeUrl" (error)="hideImg($event)" />
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
+
+    </ng-container>
+  </ng-container>
+
+  <ion-footer class="mini-player">
+    <ion-toolbar>
+      <div class="player-wrapper">
+        <img [src]="data?.artwork" alt="cover" *ngIf="id === 'music' && data?.artwork">
+        <div class="info">
+          <h4>{{ data?.trackName || 'Sin título' }}</h4>
+          <p>{{ data?.artistName || '' }}</p>
+        </div>
+        <div class="controls">
+          <ion-button fill="clear" size="small"><ion-icon name="play-skip-back"></ion-icon></ion-button>
+          <ion-button fill="clear" size="small"><ion-icon name="play"></ion-icon></ion-button>
+          <ion-button fill="clear" size="small"><ion-icon name="play-skip-forward"></ion-icon></ion-button>
+        </div>
+      </div>
+    </ion-toolbar>
+  </ion-footer>
+
+  <ng-template #skel>
+    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+  </ng-template>
+</ion-content>

@@ -1,0 +1,7 @@
+{
+  "name": "apiverse",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
