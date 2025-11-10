@@ -2,16 +2,15 @@
 export const environment = {
   production: false,
   firebase: {
-  apiKey: "AIzaSyDuwm1Ea5ksY3_0EjmUusfAJ5GsUOIKIOc",
-  authDomain: "pokeapp-2433a.firebaseapp.com",
-  databaseURL: "https://pokeapp-2433a-default-rtdb.firebaseio.com",
-  projectId: "pokeapp-2433a",
-  storageBucket: "pokeapp-2433a.firebasestorage.app",
-  messagingSenderId: "1085431021063",
-  appId: "1:1085431021063:web:8d8699181a812f0e16b4a2",
-  measurementId: "G-DCMY3DLTV3"
+    apiKey: "AIzaSyAelosAHza12sJxfUOjsfH5fTokslfUu0o",
+    authDomain: "apiuniverse.firebaseapp.com",
+    projectId: "apiuniverse",
+    storageBucket: "apiuniverse.firebasestorage.app",
+    messagingSenderId: "390683710841",
+    appId: "1:390683710841:web:263dc2b59dbe46ca9a4ba8",
+    measurementId: "G-6K6RMG9494"
   },
-    apis: {
+  apis: {
     // ...lo que ya tenías...
     joke: 'https://v2.jokeapi.dev/joke/Any?lang=es',
     cat: 'https://api.thecatapi.com/v1/images/search',
